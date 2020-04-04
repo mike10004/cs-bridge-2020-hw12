@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+cmake-build*/
+/stage/
+__pycache__/
+test-cases/
+*.pyc
+
+cmake-build*/
+/stage/
+__pycache__/
+test-cases/
+*.pyc
