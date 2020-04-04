@@ -1,8 +1,11 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "hicpp-use-auto"
 // mac937@nyu.edu
 // hw12 
 
 #include <iostream>
 #include <cassert>
+#include <vector>
 
 using namespace std;
 
@@ -58,13 +61,86 @@ private:
     long all_cents;
 };
 
-int main() {
-    cout << "q1 executed" << endl;
-    return 0;
+class Check
+{
+public:
+    Check(int number, const Money& amount, bool cashed);
+    Check();
+    void set_number(int number);
+    void set_amount(const Money& amount);
+    void set_cashed(bool cashed);
+    int get_number() const;
+    Money get_amount() const;
+    bool is_cashed() const;
+    void print(ostream& out) const;
+    void read(istream& in);
+    friend ostream& operator<<(ostream& out, const Check& check);
+    friend istream& operator>>(Check& check, istream& in);
+private:
+    int number;
+    Money amount;
+    bool cashed;
+};
+
+void readChecks(Check checks[], int n) {
+    
 }
 
+void readDeposits(Money deposits[], int n) {
+    
+}
 
+void sortChecks(vector<Check>& checks) {
+    
+}
 
+void populateCheckVector(Check source[], int numSourceChecks, vector<Check>& checks, bool cached) {
+    
+}
+
+void printCashedAndPendingChecks(Check checks[], int n, ostream& out) {
+    vector<Check> cashed;
+    vector<Check> pending;
+    populateCheckVector(checks, n, cashed, true);
+    populateCheckVector(checks, n, pending, false);
+    sortChecks(cashed);
+    out << "Cashed checks:" << endl;
+    for (Check& check : cashed) {
+        out << check << endl;
+    }
+    sortChecks(pending);
+    out << endl;
+    out << "Pending checks:" << endl;
+    for (Check& check : pending) {
+        out << check << endl;
+    }
+}
+
+Money calcBalance(const Money& oldBalance, Check checks[], int numChecks, Money deposits[], int numDeposits) {
+    
+}
+
+int main() {
+    int numChecks, numDeposits;
+    Money oldBalance;
+    Money newBalance;
+    cout << "How many checks written? ";
+    cin >> numChecks;
+    Check* checks = new Check[numChecks];
+    readChecks(checks, numChecks);
+    cout << "How many deposits? ";
+    cin >> numDeposits;
+    Money* deposits = new Money[numDeposits];
+    readDeposits(deposits, numDeposits);
+    printCashedAndPendingChecks(checks, numChecks, cout);
+    cout << "Enter old balance: ";
+    cin >> oldBalance;
+    cout << "Enter new balance: ";
+    cin >> newBalance;
+    Money expectedBalance = calcBalance(oldBalance, checks, numChecks, deposits, numDeposits);
+    cout << "Unreconciled funds: " << (expectedBalance - newBalance) << endl;
+    return 0;
+}
 
 Money operator +(const Money& amount1, const Money& amount2)
 {
@@ -175,3 +251,5 @@ bool operator<(const Money &amount1, const Money &amount2) {
     return amount1.all_cents < amount2.all_cents;
 }
 
+
+#pragma clang diagnostic pop
