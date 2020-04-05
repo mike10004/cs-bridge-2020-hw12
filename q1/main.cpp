@@ -80,67 +80,6 @@ private:
     bool cashed;
 };
 
-Check::Check(int number, const Money &amount, bool cashed) 
-        : number(number), amount(amount), cashed(cashed)
-{
-
-}
-
-Check::Check() 
-        : Check(0, Money(0), false)
-{
-
-}
-
-void Check::set_number(int number_) {
-    number = number_;
-}
-
-void Check::set_amount(const Money &amount_) {
-    amount = amount_;
-}
-
-void Check::set_cashed(bool cashed_) {
-    cashed = cashed_;
-}
-
-int Check::get_number() const {
-    return number;
-}
-
-Money Check::get_amount() const {
-    return amount;
-}
-
-bool Check::is_cashed() const {
-    return cashed;
-}
-
-void Check::print(ostream &out) const {
-    out << number << ' ' << amount << ' ';
-    if (cashed) {
-        out << "cashed";
-    } else {
-        out << "pending";
-    }
-}
-
-void Check::read(istream &in) {
-    int cashedInt;
-    in >> number >> amount >> cashedInt;
-    cashed = cashedInt != 0;
-}
-
-ostream &operator<<(ostream &out, const Check &check) {
-    check.print(out);
-    return out;
-}
-
-istream &operator>>(istream &in, Check &check) {
-    check.read(in);
-    return in;
-}
-
 void readChecks(Check checks[], int n, ostream& prompt, istream& in) {
     for (int i = 0; i < n; i++) {
         prompt << "Enter check number, amount, and cashedness (0 or 1): ";
@@ -326,5 +265,66 @@ Money::Money()
 
 bool operator<(const Money &amount1, const Money &amount2) {
     return amount1.all_cents < amount2.all_cents;
+}
+
+Check::Check(int number, const Money &amount, bool cashed)
+        : number(number), amount(amount), cashed(cashed)
+{
+
+}
+
+Check::Check()
+        : Check(0, Money(0), false)
+{
+
+}
+
+void Check::set_number(int number_) {
+    number = number_;
+}
+
+void Check::set_amount(const Money &amount_) {
+    amount = amount_;
+}
+
+void Check::set_cashed(bool cashed_) {
+    cashed = cashed_;
+}
+
+int Check::get_number() const {
+    return number;
+}
+
+Money Check::get_amount() const {
+    return amount;
+}
+
+bool Check::is_cashed() const {
+    return cashed;
+}
+
+void Check::print(ostream &out) const {
+    out << number << ' ' << amount << ' ';
+    if (cashed) {
+        out << "cashed";
+    } else {
+        out << "pending";
+    }
+}
+
+void Check::read(istream &in) {
+    int cashedInt;
+    in >> number >> amount >> cashedInt;
+    cashed = cashedInt != 0;
+}
+
+ostream &operator<<(ostream &out, const Check &check) {
+    check.print(out);
+    return out;
+}
+
+istream &operator>>(istream &in, Check &check) {
+    check.read(in);
+    return in;
 }
 
