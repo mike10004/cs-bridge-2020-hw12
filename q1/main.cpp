@@ -113,6 +113,7 @@ void printCashedAndPendingChecks(Check checks[], int n, ostream& out) {
     vector<int> pending;
     populateCheckVector(checks, n, cashed, true);
     populateCheckVector(checks, n, pending, false);
+    out << endl;
     out << "Cashed checks:" << endl;
     for (int pos : cashed) {
         out << checks[pos] << endl;
