@@ -118,10 +118,16 @@ void printCashedAndPendingChecks(Check checks[], int n, ostream& out) {
     for (int pos : cashed) {
         out << checks[pos] << endl;
     }
+    if (cashed.empty()) {
+        out << "(none)" << endl;
+    }
     out << endl;
     out << "Pending checks:" << endl;
     for (int pos : pending) {
         out << checks[pos] << endl;
+    }
+    if (pending.empty()) {
+        out << "(none)" << endl;
     }
     out << endl;
 }

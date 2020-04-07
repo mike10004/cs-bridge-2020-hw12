@@ -1,0 +1,14 @@
+How many checks written? 0
+How many deposits? 2
+Enter deposit 1 amount: $20.00
+Enter deposit 2 amount: $50.00
+
+Cashed checks:
+(none)
+
+Pending checks:
+(none)
+
+Enter old balance: $100.00
+Enter new balance: $170.00
+Unreconciled funds: $0.00
