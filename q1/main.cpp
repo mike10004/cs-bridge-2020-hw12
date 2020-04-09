@@ -19,9 +19,6 @@ public:
     friend Money operator -(const Money& amount1, const Money& amount2);
     //Returns amount 1 minus amount2.
 
-    friend Money operator -(const Money& amount);
-    //Returns the negative of the value of amount.
-
     friend bool operator ==(const Money& amount1, const Money& amount2);
     //Returns true if amount1 and amount2 have the same value; false otherwise.
 
@@ -32,9 +29,6 @@ public:
     //Initializes the object so its value represents an amount with
     //the dollars and cents given by the arguments. If the amount
     //is negative, then both dollars and cents should be negative.
-
-    explicit Money(long dollars);
-    //Initializes the object so its value represents $dollars.00.
 
     Money( );
     //Initializes the object so its value represents $0.00.
@@ -64,12 +58,12 @@ class Check
 public:
     Check(int number, const Money& amount, bool cashed);
     Check();
-    void set_number(int number_);
-    void set_amount(const Money& amount_);
-    void set_cashed(bool cashed_);
-    int get_number() const;
-    Money get_amount() const;
-    bool is_cashed() const;
+    void setNumber(int number_);
+    void setAmount(const Money& amount_);
+    void setCashed(bool cashed_);
+    int getNumber() const;
+    Money getAmount() const;
+    bool isCashed() const;
     void print(ostream& out) const;
     void read(istream& in);
     friend ostream& operator<<(ostream& out, const Check& check);
@@ -80,13 +74,26 @@ private:
     bool cashed;
 };
 
+/**
+ * Read a specified number of checks from an input stream.
+ * @param checks array of checks
+ * @param n number of checks to read
+ * @param prompt stream to write prompt to
+ * @param in stream to read checks from
+ */
 void readChecks(Check checks[], int n, ostream& prompt, istream& in) {
     for (int i = 0; i < n; i++) {
         prompt << "Enter check number, amount, and cashedness (0 or 1): ";
         in >> checks[i];
     }
 }
-
+/**
+ * Read a specified number of deposit amounts from an input string.
+ * @param deposits array of deposits
+ * @param n number of deposits to read
+ * @param prompt stream to write prompt to
+ * @param in stream to read checks from
+ */
 void readDeposits(Money deposits[], int n, ostream& prompt, istream& in) {
     for (int i = 0; i < n; i++) {
         prompt << "Enter deposit " << (i + 1) << " amount: ";
@@ -94,12 +101,20 @@ void readDeposits(Money deposits[], int n, ostream& prompt, istream& in) {
     }
 }
 
-void populateCheckVector(Check source[], int numSourceChecks, vector<int>& check_positions, bool cashed) {
+/**
+ * Populates a vector to contain positions of checks of a certain cashed-ness,
+ * ordered by check number. This is O(n^2) in the worst case.
+ * @param source array of checks
+ * @param numSourceChecks length of checks array
+ * @param check_positions vector to populate
+ * @param cashed cashed-ness of checks to examine
+ */
+void populateCheckPositionsVector(Check source[], int numSourceChecks, vector<int>& check_positions, bool cashed) {
     for (int i = 0; i < numSourceChecks; i++) {
-        if (source[i].is_cashed() == cashed) {
+        if (source[i].isCashed() == cashed) {
             size_t j;
             for (j = 0; j < check_positions.size(); j++) {
-                if (source[check_positions[j]].get_number() > source[i].get_number()) {
+                if (source[check_positions[j]].getNumber() > source[i].getNumber()) {
                     break;
                 }
             }
@@ -108,11 +123,18 @@ void populateCheckVector(Check source[], int numSourceChecks, vector<int>& check
     }
 }
 
+/**
+ * Prints cashed and pending checks in two groups. Within each group,
+ * the printed checks are ordered by check number.
+ * @param checks array of checks
+ * @param n length of array
+ * @param out stream to print to
+ */
 void printCashedAndPendingChecks(Check checks[], int n, ostream& out) {
     vector<int> cashed;
     vector<int> pending;
-    populateCheckVector(checks, n, cashed, true);
-    populateCheckVector(checks, n, pending, false);
+    populateCheckPositionsVector(checks, n, cashed, true);
+    populateCheckPositionsVector(checks, n, pending, false);
     out << endl;
     out << "Cashed checks:" << endl;
     for (int pos : cashed) {
@@ -132,14 +154,23 @@ void printCashedAndPendingChecks(Check checks[], int n, ostream& out) {
     out << endl;
 }
 
+/**
+ * Calculates the net change in balance resulting from writing and depositing checks.
+ * Only checks that are cashed contribute toward the change.
+ * @param checks array of checks
+ * @param numChecks length of checks array
+ * @param deposits array of deposits
+ * @param numDeposits length of deposits array
+ * @return change in balance
+ */
 Money calcNetChange(const Check checks[], int numChecks, const Money deposits[], int numDeposits) {
-    Money sum(0);
+    Money sum(0, 0);
     for (int i = 0; i < numDeposits; i++) {
         sum = sum + deposits[i];
     }
     for (int i = 0; i < numChecks; i++) {
-        if (checks[i].is_cashed()) {
-            sum = sum - checks[i].get_amount();
+        if (checks[i].isCashed()) {
+            sum = sum - checks[i].getAmount();
         }
     }
     return sum;
@@ -187,14 +218,6 @@ Money operator -(const Money& amount1, const Money& amount2)
     temp.all_cents = amount1.all_cents - amount2.all_cents;
     return temp;
 }
-
-Money operator -(const Money& amount)
-{
-    Money temp;
-    temp.all_cents = -amount.all_cents;
-    return temp;
-}
-
 
 int digit_to_int(char c)
 {
@@ -257,16 +280,12 @@ ostream& operator <<(ostream& outs, const Money& amount)
 
 Money::Money(long dollars, int cents) 
         : all_cents(dollars * 100 + cents) {
+    // positive-ness of dollars and cents must be the same
     assert((dollars >= 0 && cents >= 0) || (dollars <= 0 && cents <= 0));
 }
 
-Money::Money(long dollars) 
-        : Money(dollars, 0) 
-{
-}
-
 Money::Money() 
-        : Money(0) 
+        : Money(0, 0)
 {
 }
 
@@ -281,32 +300,32 @@ Check::Check(int number, const Money &amount, bool cashed)
 }
 
 Check::Check()
-        : Check(0, Money(0), false)
+        : Check(0, Money(0, 0), false)
 {
 
 }
 
-void Check::set_number(int number_) {
+void Check::setNumber(int number_) {
     number = number_;
 }
 
-void Check::set_amount(const Money &amount_) {
+void Check::setAmount(const Money &amount_) {
     amount = amount_;
 }
 
-void Check::set_cashed(bool cashed_) {
+void Check::setCashed(bool cashed_) {
     cashed = cashed_;
 }
 
-int Check::get_number() const {
+int Check::getNumber() const {
     return number;
 }
 
-Money Check::get_amount() const {
+Money Check::getAmount() const {
     return amount;
 }
 
-bool Check::is_cashed() const {
+bool Check::isCashed() const {
     return cashed;
 }
 
@@ -334,4 +353,3 @@ istream &operator>>(istream &in, Check &check) {
     check.read(in);
     return in;
 }
-
