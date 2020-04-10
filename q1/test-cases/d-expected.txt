@@ -13,4 +13,4 @@ Pending checks:
 
 Enter old balance: $100.00
 Enter new balance: $94.00
-Unreconciled funds: $0.00
+Unreconciled funds: $2.50

@@ -1,18 +1,18 @@
 How many checks written? 3
 Enter check number, amount, and cashedness (0 or 1): 123 $4.00 1
 Enter check number, amount, and cashedness (0 or 1): 122 $2.50 0
-Enter check number, amount, and cashedness (0 or 1): 121 $1.00 1
+Enter check number, amount, and cashedness (0 or 1): 121 $1.00 0
 How many deposits? 2
 Enter deposit 1 amount: $20.00
 Enter deposit 2 amount: $50.00
 
 Cashed checks:
-121 $1.00 cashed
 123 $4.00 cashed
 
 Pending checks:
+121 $1.00 pending
 122 $2.50 pending
 
 Enter old balance: $100.00
-Enter new balance: $164.00
-Unreconciled funds: $1.00
+Enter new balance: $166.00
+Unreconciled funds: $3.50
