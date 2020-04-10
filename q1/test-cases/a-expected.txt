@@ -1,3 +1,5 @@
+Enter money amounts in the format "$1.00" (dollar sign and cents required).
+
 How many checks written? 3
 Enter check number, amount, and cashedness (0 or 1): 123 $5.00 1
 Enter check number, amount, and cashedness (0 or 1): 122 $2.50 0

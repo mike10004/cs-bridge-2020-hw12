@@ -200,6 +200,7 @@ Money computeSum(const Check checks[], int numChecks) {
 }
 
 int main() {
+    cout << "Enter money amounts in the format \"$1.00\" (dollar sign and cents required)." << endl << endl;
     int numChecks, numDeposits;
     Money oldBalance;
     Money newBalance;
