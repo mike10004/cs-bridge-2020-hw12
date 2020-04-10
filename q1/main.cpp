@@ -154,24 +154,18 @@ void printCashedAndPendingChecks(Check checks[], int n, ostream& out) {
     out << endl;
 }
 
-/**
- * Calculates the net change in balance resulting from writing and depositing checks.
- * Only checks that are cashed contribute toward the change.
- * @param checks array of checks
- * @param numChecks length of checks array
- * @param deposits array of deposits
- * @param numDeposits length of deposits array
- * @return change in balance
- */
-Money calcNetChange(const Check checks[], int numChecks, const Money deposits[], int numDeposits) {
+Money computeSum(const Money deposits[], int numDeposits) {
     Money sum(0, 0);
     for (int i = 0; i < numDeposits; i++) {
         sum = sum + deposits[i];
     }
+    return sum;
+}
+
+Money computeSum(const Check checks[], int numChecks) {
+    Money sum(0, 0);
     for (int i = 0; i < numChecks; i++) {
-        if (checks[i].isCashed()) {
-            sum = sum - checks[i].getAmount();
-        }
+        sum = sum + checks[i].getAmount();
     }
     return sum;
 }
@@ -193,8 +187,8 @@ int main() {
     cin >> oldBalance;
     cout << "Enter new balance: ";
     cin >> newBalance;
-    Money expectedBalance = oldBalance + calcNetChange(checks, numChecks, deposits, numDeposits);
-    cout << "Unreconciled funds: " << (expectedBalance - newBalance) << endl;
+    Money expectedBalance = oldBalance + computeSum(deposits, numDeposits) - computeSum(checks, numChecks);
+    cout << "Unreconciled funds: " << (newBalance - expectedBalance) << endl;
     delete[] checks;
     delete[] deposits;
     return 0;
