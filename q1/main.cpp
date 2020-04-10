@@ -154,20 +154,48 @@ void printCashedAndPendingChecks(Check checks[], int n, ostream& out) {
     out << endl;
 }
 
-Money computeSum(const Money deposits[], int numDeposits) {
+/**
+ * Computes the sum of an array of money amounts.
+ * @param amounts array of amounts
+ * @param numAmounts length of array
+ * @return the sum
+ */
+Money computeSum(const Money amounts[], int numAmounts) {
     Money sum(0, 0);
-    for (int i = 0; i < numDeposits; i++) {
-        sum = sum + deposits[i];
+    for (int i = 0; i < numAmounts; i++) {
+        sum = sum + amounts[i];
     }
     return sum;
 }
 
-Money computeSum(const Check checks[], int numChecks) {
+/**
+ * Computes the sum of the amounts of checks in an array.
+ * The excludeUncashed argument specifies whether to exclude
+ * uncashed checks in the total.
+ * @param checks array of checks
+ * @param numChecks length of array
+ * @param excludeUncashed true if uncashed checks are to be excluded
+ * @return sum
+ */
+Money computeSum(const Check checks[], int numChecks, bool excludeUncashed) {
     Money sum(0, 0);
     for (int i = 0; i < numChecks; i++) {
-        sum = sum + checks[i].getAmount();
+        if (!excludeUncashed || checks[i].isCashed()) {
+            sum = sum + checks[i].getAmount();
+        }
     }
     return sum;
+}
+
+/**
+ * Computes the sum of the amounts of all checks in an array.
+ * The sum includes checks that have not been cashed.
+ * @param checks array of checks
+ * @param numChecks length of array
+ * @return sum
+ */
+Money computeSum(const Check checks[], int numChecks) {
+    return computeSum(checks, numChecks, false);
 }
 
 int main() {
@@ -189,6 +217,8 @@ int main() {
     cin >> newBalance;
     Money expectedBalance = oldBalance + computeSum(deposits, numDeposits) - computeSum(checks, numChecks);
     cout << "Unreconciled funds: " << (newBalance - expectedBalance) << endl;
+    // check for input errors
+    assert (newBalance == (oldBalance + computeSum(deposits, numDeposits) - computeSum(checks, numChecks, true)));
     delete[] checks;
     delete[] deposits;
     return 0;
