@@ -10,6 +10,7 @@ using namespace std;
 //DISPLAY 11.9 Program Using an Array of the Money Object
 //This is the definition for the class Money.
 //Values of this type are amounts of money in U.S. currency.
+// Class declaration is from Savitch source code available online.
 class Money
 {
 public:
@@ -223,6 +224,8 @@ int main() {
     delete[] deposits;
     return 0;
 }
+
+// Money class function definitions are taken from Savitch source code.
 
 Money operator +(const Money& amount1, const Money& amount2)
 {
